@@ -23,7 +23,7 @@ import com.arthursouza.todosimple.services.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 @Validated
 public class UserController {
     

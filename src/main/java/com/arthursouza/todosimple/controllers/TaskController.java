@@ -19,16 +19,18 @@ import java.util.List;
 
 import com.arthursouza.todosimple.models.Task;
 import com.arthursouza.todosimple.services.TaskService;
+import com.arthursouza.todosimple.services.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @Validated
-@RequestMapping("/task/")
+@RequestMapping("/task")
 public class TaskController {
     
     @Autowired
     private TaskService taskService;
+
 
 
 
