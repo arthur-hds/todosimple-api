@@ -30,7 +30,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /* localhost:8080/user/2 */
+    /* localhost:8080/user/2 */ 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id){
 

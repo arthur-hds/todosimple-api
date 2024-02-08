@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.arthursouza.todosimple.models.Task;
 import com.arthursouza.todosimple.models.User;
 import com.arthursouza.todosimple.repositories.TaskRepository;
+import com.arthursouza.todosimple.services.exceptions.ObjectNotFoundException;
 
 
 @Service
@@ -25,7 +26,7 @@ public class TaskService {
     /* A "findById" method that calls JPARepository, but designed to be able to show an error message when not found */
     public Task findById(Long id){
         Optional<Task> task = this.taskRepository.findById(id);
-        return task.orElseThrow(() -> new RuntimeException(
+        return task.orElseThrow(() -> new ObjectNotFoundException(
             "Task não encontrada! Id: "+id+ ", Tipo: "+ Task.class.getName()
             ));
     }
