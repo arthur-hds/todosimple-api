@@ -131,7 +131,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
         @ExceptionHandler(ConstraintViolationException.class)
         @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)        
-
         public ResponseEntity<Object> handleConstraintViolationException(
             ConstraintViolationException constraintViolationException,
             WebRequest request){

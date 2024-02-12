@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.arthursouza.todosimple.models.User;
 import com.arthursouza.todosimple.repositories.UserRepository;
+import com.arthursouza.todosimple.services.exceptions.DataBindingViolationException;
 import com.arthursouza.todosimple.services.exceptions.ObjectNotFoundException;
 
 
@@ -51,7 +52,7 @@ public class UserService {
         try {
             this.userRepository.delete(obj);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possível excluir o usuário, pois há entidades relacionadas");
+            throw new DataBindingViolationException("Não é possível excluir o usuário, pois há entidades relacionadas");
         }
         
 
