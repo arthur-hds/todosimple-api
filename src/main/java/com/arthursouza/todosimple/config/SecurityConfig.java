@@ -21,11 +21,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     
     public final static String[] PUBLIC_MATCHERS = {
+        
         "/"
+
     };
 
 
-    public final static String[] PUBLIC_MATCHERS_POST ={
+    public final static String[] PUBLIC_MATCHERS_POST = {
 
         "/user",
         "/login"
@@ -39,6 +41,7 @@ public class SecurityConfig {
         //Disable the "csrf" protection, usable for test the program
         http.cors().and().csrf().disable();
 
+        //Disable the process of authentication from the following endpoints
         http.authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
             .requestMatchers(PUBLIC_MATCHERS).permitAll()
@@ -46,6 +49,7 @@ public class SecurityConfig {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        
         return http.build();
     }
 
