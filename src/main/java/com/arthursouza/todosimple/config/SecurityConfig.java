@@ -2,13 +2,17 @@ package com.arthursouza.todosimple.config;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,6 +24,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     
+
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+
+
     public final static String[] PUBLIC_MATCHERS = {
         
         "/"
@@ -40,6 +52,23 @@ public class SecurityConfig {
 
         //Disable the "csrf" protection, usable for test the program
         http.cors().and().csrf().disable();
+
+
+        
+        AuthenticationManagerBuilder authenticateManagerBuilder = http
+            .getSharedObject(AuthenticationManagerBuilder.class);
+
+
+        //UserDetails provides the user details in the authentication process
+        //PasswordEncoder checks if the following password is the same as the one provided during the creation of the user
+        authenticateManagerBuilder.userDetailsService(this.userDetailsService)
+            .passwordEncoder(bCryptPasswordEncoder());
+
+
+        this.authenticationManager = authenticateManagerBuilder.build();
+
+
+
 
         //Disable the process of authentication from the following endpoints
         http.authorizeHttpRequests()

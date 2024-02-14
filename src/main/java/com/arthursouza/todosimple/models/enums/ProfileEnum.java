@@ -19,8 +19,8 @@ public enum ProfileEnum {
     private int code;
     private String description;
     
-    
 
+    //Returns one profileEnum (ADMIN, USER)
     public static ProfileEnum toEnum(Integer code){
 
         if (Objects.isNull(code)) 

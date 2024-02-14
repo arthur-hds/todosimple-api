@@ -78,7 +78,7 @@ public class User {
 
     //Getters & Setters & Constructor
 
-
+    //Returns all ProfileEnum objects (ADMIN, USER)
     public Set<ProfileEnum> getProfiles(){
 
         return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
