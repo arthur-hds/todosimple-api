@@ -19,6 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.arthursouza.todosimple.security.JWTAuthenticationFilter;
+import com.arthursouza.todosimple.security.JWTUtil;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -30,7 +33,8 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
-
+    @Autowired
+    private JWTUtil jwtUtil;
 
     public final static String[] PUBLIC_MATCHERS = {
         
@@ -68,13 +72,18 @@ public class SecurityConfig {
         this.authenticationManager = authenticateManagerBuilder.build();
 
 
-
-
         //Disable the process of authentication from the following endpoints
         http.authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
             .requestMatchers(PUBLIC_MATCHERS).permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().authenticated()
+            .and().authenticationManager(authenticationManager);
+
+
+            
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
+
+
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
