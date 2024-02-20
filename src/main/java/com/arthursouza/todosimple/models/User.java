@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,14 +27,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.arthursouza.todosimple.models.enums.ProfileEnum;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 
 @Entity
 @Table(name = User.TABLE_NAME)
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -74,9 +76,9 @@ public class User {
     @CollectionTable(name = "user_profile")
     @Column(name = "profile", nullable = false)
     private Set<Integer> profiles = new HashSet<Integer>();
-    
 
-    //Getters & Setters & Constructor
+
+
 
     //Returns all ProfileEnum objects (ADMIN, USER)
     public Set<ProfileEnum> getProfiles(){

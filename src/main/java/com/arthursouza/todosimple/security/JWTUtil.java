@@ -34,7 +34,7 @@ public class JWTUtil {
 
 
 
-    private String generateToken(String username){
+    public String generateToken(String username){
 
         SecretKey key = getKeyBySecret();
 

@@ -36,14 +36,15 @@ public class SecurityConfig {
     @Autowired
     private JWTUtil jwtUtil;
 
-    public final static String[] PUBLIC_MATCHERS = {
+
+    public static final String[] PUBLIC_MATCHERS = {
         
         "/"
 
     };
 
 
-    public final static String[] PUBLIC_MATCHERS_POST = {
+    public static final String[] PUBLIC_MATCHERS_POST = {
 
         "/user",
         "/login"
@@ -76,8 +77,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
             .requestMatchers(PUBLIC_MATCHERS).permitAll()
-            .anyRequest().authenticated()
-            .and().authenticationManager(authenticationManager);
+            .anyRequest().authenticated().and()
+            .authenticationManager(authenticationManager);
 
 
             
