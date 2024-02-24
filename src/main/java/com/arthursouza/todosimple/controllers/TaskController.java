@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.arthursouza.todosimple.models.Task;
 import com.arthursouza.todosimple.services.TaskService;
-import com.arthursouza.todosimple.services.UserService;
 
 import jakarta.validation.Valid;
 
@@ -41,13 +40,19 @@ public class TaskController {
     }
 
 
-    @GetMapping("user/{userId}")
-    public ResponseEntity<List<Task>> findAllUserById(@PathVariable Long userId){
-        List<Task> tasks = this.taskService.findAllUsersById(userId);
+    @GetMapping("/user")
+    public ResponseEntity<List<Task>> findAllByUser(){
+        List<Task> tasks = this.taskService.findAllByUser();
         return ResponseEntity.ok().body(tasks);
 
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Task>> findAllTasks(){
+        List<Task> tasks = this.taskService.findAllTasks();
+        return ResponseEntity.ok().body(tasks);
+        
+    }
 
     /* CRUD Methods */
 
