@@ -34,7 +34,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
     }
 
 
-    //Gets the authenticated user
+    //Verifies the token and gets the authenticated user
     private UsernamePasswordAuthenticationToken getAuthorization(String token){
 
         if(this.jwtUtil.isValidToken(token)){

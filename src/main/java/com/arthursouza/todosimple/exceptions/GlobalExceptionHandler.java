@@ -3,6 +3,7 @@ package com.arthursouza.todosimple.exceptions;
 import java.io.IOException;
 import java.net.http.HttpRequest;
 
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.boot.model.relational.Database;
 import org.apache.catalina.connector.Response;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.validation.FieldError;
@@ -23,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.arthursouza.todosimple.services.exceptions.ObjectNotFoundException;
+import com.arthursouza.todosimple.services.exceptions.AuthorizationException;
 import com.arthursouza.todosimple.services.exceptions.DataBindingViolationException;
 
 import jakarta.servlet.ServletException;
@@ -63,6 +66,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
  
     }
 
+
     private ResponseEntity<Object> buildErrorResponse(
         Exception exception,
         String message,
@@ -95,6 +99,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
 
 
 
+    
+
+    //Exceptions
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -134,21 +141,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
 
 
 
-        @ExceptionHandler(ConstraintViolationException.class)
-        @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)        
-        public ResponseEntity<Object> handleConstraintViolationException(
-            ConstraintViolationException constraintViolationException,
-            WebRequest request){
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)        
+    public ResponseEntity<Object> handleConstraintViolationException(
+        ConstraintViolationException constraintViolationException,
+        WebRequest request){
 
-            
-            log.error("Failed to validate element", constraintViolationException);
+        
+        log.error("Failed to validate element", constraintViolationException);
 
 
-            return buildErrorResponse(
-                constraintViolationException, 
-                HttpStatus.UNPROCESSABLE_ENTITY, 
-                request);
-            }  
+        return buildErrorResponse(
+            constraintViolationException, 
+            HttpStatus.UNPROCESSABLE_ENTITY, 
+            request);
+        }  
         
         
     @ExceptionHandler(ObjectNotFoundException.class)
@@ -180,6 +187,54 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
             request);
     }
 
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> handleAuthenticationException(
+        AuthenticationException authenticationException,
+        WebRequest request){
+
+        log.error("Failed to authenticate ", authenticationException);
+
+        return buildErrorResponse(
+            authenticationException,
+            HttpStatus.UNAUTHORIZED,
+            request);
+
+        }
+
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleAuthorizationException(
+        AuthorizationException authorizationException,
+        WebRequest request){
+
+        log.error("Failed to authorizate ", authorizationException);
+
+        return buildErrorResponse(
+            authorizationException,
+            HttpStatus.FORBIDDEN,
+            request);
+
+        }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleAccessDenied(
+        AccessDeniedException accessDeniedException,
+        WebRequest request){
+
+            log.error("Authorization Error", accessDeniedException);
+
+            return buildErrorResponse(
+                accessDeniedException,
+                HttpStatus.FORBIDDEN, 
+                request);
+
+    }
+    
 
 
     //The ErrorResponse is already in the parameters

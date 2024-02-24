@@ -1,11 +1,13 @@
 package com.arthursouza.todosimple.services;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.arthursouza.todosimple.models.User;
 import com.arthursouza.todosimple.models.enums.ProfileEnum;
 import com.arthursouza.todosimple.repositories.UserRepository;
+import com.arthursouza.todosimple.security.UserSpringSecurity;
+import com.arthursouza.todosimple.services.exceptions.AuthorizationException;
 import com.arthursouza.todosimple.services.exceptions.DataBindingViolationException;
 import com.arthursouza.todosimple.services.exceptions.ObjectNotFoundException;
 
@@ -33,12 +37,21 @@ public class UserService {
 
     /* A "findById" method that calls JPARepository, but designed to be able to show an error message when not found */
     public User findById(long id){
+        UserSpringSecurity userSpringSecurity = authenticated();
+        if (!Objects.nonNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !(userSpringSecurity.getId()).equals(id) ) {
+            throw new AuthorizationException("User denied");
+        }
+
+
         Optional<User> user =  this.userRepository.findById(id);
         return user.orElseThrow(() -> new ObjectNotFoundException(
             "Usuário não encontrado! Id: "+id+ ", Tipo: "+ User.class.getName()
         ));
     }
 
+
+
+    
     /* CRUD methods */
     @Transactional
     public User create (User obj){
@@ -69,6 +82,21 @@ public class UserService {
         
 
     }
+
+
+    public static UserSpringSecurity authenticated(){
+        try {
+
+            return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        } catch (Exception e) {
+            return null;
+        }
+
+
+    }
+
+
 
 
 
