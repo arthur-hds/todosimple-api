@@ -13,12 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.arthursouza.todosimple.models.User;
+import com.arthursouza.todosimple.models.dto.UserCreateDTO;
+import com.arthursouza.todosimple.models.dto.UserUpdateDTO;
 import com.arthursouza.todosimple.models.enums.ProfileEnum;
 import com.arthursouza.todosimple.repositories.UserRepository;
 import com.arthursouza.todosimple.security.UserSpringSecurity;
 import com.arthursouza.todosimple.services.exceptions.AuthorizationException;
 import com.arthursouza.todosimple.services.exceptions.DataBindingViolationException;
 import com.arthursouza.todosimple.services.exceptions.ObjectNotFoundException;
+
+import jakarta.validation.Valid;
 
 
 
@@ -97,7 +101,20 @@ public class UserService {
     }
 
 
+    public User fromDTO(@Valid UserCreateDTO obj) {
+        User user = new User();
+        user.setUsername(obj.getUsername());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
 
+
+    public User fromDTO(@Valid UserUpdateDTO obj) {
+        User user = new User();
+        user.setId(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
 
 
 }

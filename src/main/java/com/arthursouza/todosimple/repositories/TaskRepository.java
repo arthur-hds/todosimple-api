@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.arthursouza.todosimple.models.Task;
+import com.arthursouza.todosimple.models.projection.TaskProjection;
 
 public interface TaskRepository extends JpaRepository<Task, Long>{
     
-    List<Task> findByUser_id(Long id);
+    List<TaskProjection> findByUser_id(Long id);
 
     @Query(value = "SELECT * from task", nativeQuery = true)
-    List<Task> findTasks();
+    List<TaskProjection> findTasks();
 
     //Optional<Task> findById(Long id);
 

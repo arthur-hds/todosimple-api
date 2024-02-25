@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.arthursouza.todosimple.models.Task;
 import com.arthursouza.todosimple.models.User;
 import com.arthursouza.todosimple.models.enums.ProfileEnum;
+import com.arthursouza.todosimple.models.projection.TaskProjection;
 import com.arthursouza.todosimple.repositories.TaskRepository;
 import com.arthursouza.todosimple.security.UserSpringSecurity;
 import com.arthursouza.todosimple.services.exceptions.DataBindingViolationException;
@@ -43,20 +44,20 @@ public class TaskService {
     }
 
 
-    public List<Task> findAllByUser(){
+    public List<TaskProjection> findAllByUser(){
 
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if (Objects.isNull(userSpringSecurity)) {
             throw new ObjectNotFoundException("Access denied");
         }
 
-        List<Task> tasks = this.taskRepository.findByUser_id(userSpringSecurity.getId());
+        List<TaskProjection> tasks = this.taskRepository.findByUser_id(userSpringSecurity.getId());
         return tasks;
 
     }
 
 
-    public List<Task> findAllTasks(){
+    public List<TaskProjection> findAllTasks(){
 
         
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -64,7 +65,7 @@ public class TaskService {
             throw new ObjectNotFoundException("Access denied");
         }
 
-        List<Task> tasks = this.taskRepository.findTasks();
+        List<TaskProjection> tasks = this.taskRepository.findTasks();
         return tasks;
 
 
