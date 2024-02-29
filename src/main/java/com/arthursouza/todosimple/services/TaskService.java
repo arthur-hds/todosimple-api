@@ -68,7 +68,6 @@ public class TaskService {
         List<TaskProjection> tasks = this.taskRepository.findTasks();
         return tasks;
 
-
     }
 
 
